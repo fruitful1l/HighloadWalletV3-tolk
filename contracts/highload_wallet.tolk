@@ -1,4 +1,7 @@
 fun setActions(actions: Outlist): void asm "c5 POP";
+fun builder.storeZeroes(mutate self, x: int): self asm "STZEROES";
+fun acceptExternalMessage(): void asm "ACCEPT"; // for some reason not in stdlib
+
 
 const internalTransferOp: int = 0xae42e5a4;
 //unused consts should be deleted
@@ -30,13 +33,36 @@ struct (0xae42e5a4) InternalTransfer {
 
 struct ExternalInMsgBody {
    body: Cell<MsgInner>;
-}       
+}   
+
+struct MapValue<T> {
+    zeroes: bits1023;
+}
+
+@inline
+fun WalletStorage.newBitValue(mutate self, shift: uint13, bitNumber: uint10){
+    var res = self.queries.get(shift);
+    var value: builder? = null;
+    if (res.isFound) {
+        value = beginCell().storeSlice(res.loadValue());
+    } else {
+        value = beginCell().storeZeroes(bitNumber);
+    }
+
+    var valueSlice = value.beginParse();
+    valueSlice.skipBits(bitNumber);
+    assert (!valueSlice.preloadInt(1)) throw ALREADY_EXECUTED;
+
+    
+}
+
+
 
 struct WalletStorage {
     publicKey: uint256;
     subwalletId: uint32;
-    oldQueries: map<uint13, cell?>;
-    queries: map<uint13, cell?>;
+    oldQueries: map<uint13, slice>;
+    queries: map<uint13, slice>;
     lastCleanTime: int64;
     timeout: int22;
 }
@@ -63,7 +89,7 @@ struct MsgInner {
     timeout: uint22;
 }
 
-type AllowedExternalMessageToWalletV5 = ExternalInMsgBody;
+type AllowedExternalMessageToWallet = ExternalInMsgBody;
 
 
 
@@ -99,7 +125,7 @@ fun onExternalMessage(inMsg: slice) {
         storage.lastCleanTime = blockchain.now();
     }
     
-    var msg = lazy AllowedExternalMessageToWalletV5.fromSlice(inMsg);
+    var msg = lazy AllowedExternalMessageToWallet.fromSlice(inMsg);
     val msgInnerHash = msg.body.hash();
 
     assert(isSignatureValid(msgInnerHash, signature, storage.publicKey)) throw INVALID_SIGNATURE;
@@ -111,6 +137,30 @@ fun onExternalMessage(inMsg: slice) {
 
     assert(innerSlice.createdAt > blockchain.now() - storage.timeout) throw INVALID_CREATED_AT;
     assert(innerSlice.createdAt <= blockchain.now()) throw INVALID_CREATED_AT;
+
+    var resOld = storage.oldQueries.get(innerSlice.queryId.shift);
+    if (resOld.isFound) {
+        var value = resOld.loadValue();
+        value.skipBits(innerSlice.queryId.bitNumber);
+        assert(!value.preloadInt(1)) throw ALREADY_EXECUTED;
+    }
+
+    var res = storage.queries.get(innerSlice.queryId.shift);
+    var newValue: builder? = null;
+    if (res.isFound) {
+        var value = res.loadValue();
+        var head = value.loadBits(innerSlice.queryId.bitNumber);
+        assert(!value.loadInt(1)) throw ALREADY_EXECUTED;
+
+        // possible make to structs
+        newValue = beginCell().storeSlice(head).storeBool(true).storeSlice(value);
+    } else {
+        newValue = beginCell().storeZeroes(innerSlice.queryId.bitNumber).storeBool(true).storeZeroes(CELL_BIT_SIZE - innerSlice.queryId.bitNumber - 1);
+    }
+
+    acceptExternalMessage();
+    
+    //storage.queries.set(innerSlice.queryId.shift, newValue.toSlice());
 
 
 }
