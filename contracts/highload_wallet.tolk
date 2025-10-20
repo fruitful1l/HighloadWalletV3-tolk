@@ -1,3 +1,5 @@
+import "@stdlib/tvm-lowlevel"
+
 fun setActions(actions: Outlist): void asm "c5 POP";
 fun builder.storeZeroes(mutate self, x: int): self asm "STZEROES";
 fun acceptExternalMessage(): void asm "ACCEPT"; // for some reason not in stdlib
@@ -31,29 +33,44 @@ struct (0xae42e5a4) InternalTransfer {
     actions: Cell<Outlist>;
 }
 
+fun InternalTransfer.unpackFromSlice(mutate s: slice) {
+    s.loadUint(3);
+    s.loadAddress();
+    s.loadAddress();
+    s.loadCoins();
+    s.skipDict();
+    s.loadCoins();
+    s.loadCoins();
+    s.skipBits(64 + 32);
+    var body = s.loadInt(1)? s.loadRef(): null;
+    s.assertEnd();
+    return body;
+}
 struct ExternalInMsgBody {
    body: Cell<MsgInner>;
 }   
 
-struct MapValue<T> {
-    zeroes: bits1023;
-}
+
 
 @inline
 fun WalletStorage.newBitValue(mutate self, shift: uint13, bitNumber: uint10){
     var res = self.queries.get(shift);
-    var value: builder? = null;
+    var newValue: builder? = null;
     if (res.isFound) {
-        value = beginCell().storeSlice(res.loadValue());
+        var value = res.loadValue();
+        var valueSlice = value;
+        valueSlice.skipBits(bitNumber);
+        assert (!valueSlice.preloadInt(1)) throw ALREADY_EXECUTED;
+
+        newValue = beginCell().storeSlice(value.loadBits(bitNumber)).storeBool(true).storeSlice(value);
+
     } else {
-        value = beginCell().storeZeroes(bitNumber);
+        newValue = beginCell().storeZeroes(bitNumber).storeBool(true).storeZeroes(CELL_BIT_SIZE - bitNumber - 1);
     }
 
-    var valueSlice = value.beginParse();
-    valueSlice.skipBits(bitNumber);
-    assert (!valueSlice.preloadInt(1)) throw ALREADY_EXECUTED;
-
-    
+    acceptExternalMessage();
+    self.queries.set(shift, newValue.endCell().beginParse());
+    self.save();
 }
 
 
@@ -82,12 +99,14 @@ struct QueryId {
 
 struct MsgInner {
     subwalletId: uint32;
-    messageToSend: cell?;
+    messageToSend: cell;
     sendMode: uint8;
     queryId: QueryId;
     createdAt: uint64;
     timeout: uint22;
 }
+
+
 
 type AllowedExternalMessageToWallet = ExternalInMsgBody;
 
@@ -145,22 +164,95 @@ fun onExternalMessage(inMsg: slice) {
         assert(!value.preloadInt(1)) throw ALREADY_EXECUTED;
     }
 
-    var res = storage.queries.get(innerSlice.queryId.shift);
-    var newValue: builder? = null;
-    if (res.isFound) {
-        var value = res.loadValue();
-        var head = value.loadBits(innerSlice.queryId.bitNumber);
-        assert(!value.loadInt(1)) throw ALREADY_EXECUTED;
+    storage.newBitValue(innerSlice.queryId.shift, innerSlice.queryId.bitNumber);
 
-        // possible make to structs
-        newValue = beginCell().storeSlice(head).storeBool(true).storeSlice(value);
-    } else {
-        newValue = beginCell().storeZeroes(innerSlice.queryId.bitNumber).storeBool(true).storeZeroes(CELL_BIT_SIZE - innerSlice.queryId.bitNumber - 1);
+    commitContractDataAndActions();
+
+    var msgToSend = innerSlice.messageToSend.beginParse();
+    assert(!msgToSend.loadUint(1)) throw INVALID_MESSAGE_TO_SEND;
+    
+    if (msgToSend.loadMessageFlags() & 1) { 
+        return();
+    }
+    
+    assert (msgToSend.loadAddress().isNone()) throw INVALID_MESSAGE_TO_SEND;
+    msgToSend.loadAddress();
+    val valueToSend = msgToSend.loadCoins();
+    msgToSend.skipDict();
+    msgToSend.loadCoins();
+    msgToSend.loadCoins();
+    msgToSend.skipBits(64 + 32);
+    assert(msgToSend.loadUint(1)) throw INVALID_MESSAGE_TO_SEND;
+    if (msgToSend.loadInt(1)) {
+        msgToSend.loadRef();
+        msgToSend.assertEnd();
     }
 
-    acceptExternalMessage();
-    
-    //storage.queries.set(innerSlice.queryId.shift, newValue.toSlice());
+    val msgToSelf = createMessage({
+        bounce: false,
+        value: valueToSend,
+        dest: contract.getAddress(),
+        body: InternalTransfer.fromCell(innerSlice.messageToSend),
+    });
 
+    msgToSelf.send(innerSlice.sendMode | SEND_MODE_IGNORE_ERRORS);
+    return();
+}
 
+get fun get_public_key()  {
+    var storage = lazy WalletStorage.load();
+    return (storage.publicKey);
+}
+
+get fun get_subwallet_id() {
+    var storage = lazy WalletStorage.load();
+    return (storage.subwalletId);
+}
+
+get fun get_last_clean_time() {
+    var storage = lazy WalletStorage.load();
+    return (storage.lastCleanTime);
+}
+
+get fun get_timeout() {
+    var storage = lazy WalletStorage.load();
+    return (storage.timeout);
+}
+
+@method_id(0x1cbf2)
+fun isProcessed(queryId: int, needClean: int): int {
+    var shift = queryId >> BIT_NUMBER_SIZE;
+    var bitNumber = queryId & CELL_BIT_SIZE;
+
+    var storage = lazy WalletStorage.load();
+
+    if (needClean) {
+        if (storage.lastCleanTime < (blockchain.now() - storage.timeout)) {
+            (storage.oldQueries, storage.queries) = (storage.queries, createEmptyMap());
+            if (storage.lastCleanTime < (blockchain.now() - (storage.timeout * 2))) {
+                storage.oldQueries = createEmptyMap();
+            }
+            storage.lastCleanTime = blockchain.now();
+        }
+    }
+
+    var resOld = storage.oldQueries.get(shift);
+    if (resOld.isFound) {
+        var value = resOld.loadValue();
+        value.skipBits(bitNumber);
+        if (value.preloadInt(1)) {
+            return -1;
+        }
+    }
+
+    var res = storage.queries.get(shift);
+    if (res.isFound) {
+        var valueCurrent = resOld.loadValue();
+        valueCurrent.skipBits(bitNumber);
+        if (valueCurrent.preloadInt(1)) {
+            return -1;
+        }
+    }
+
+    return 0;
 }
