@@ -3,7 +3,7 @@ import "@stdlib/tvm-lowlevel"
 fun setActions(actions: Outlist): void asm "c5 POP";
 fun builder.storeZeroes(mutate self, x: int): self asm "STZEROES";
 fun acceptExternalMessage(): void asm "ACCEPT"; // for some reason not in stdlib
-
+fun slice.loadTwoSlices( self, len: int): (slice, slice) asm "LDSLICEX";
 
 const internalTransferOp: int = 0xae42e5a4;
 //unused consts should be deleted
@@ -45,27 +45,44 @@ struct ExternalInMsgBody {
 
 
 
-@inline
+
 fun WalletStorage.newBitValue(mutate self, shift: uint13, bitNumber: uint10){
-    debug.print(11111111);
+    debug.printString("new bit check");
+
     var queries = self.queries;
+    debug.print(queries);
+    debug.print(shift);
+    debug.print(bitNumber);
     var res = queries.get(shift);
     var newValue: builder? = null;
     if (res.isFound) {
-        var value = res.loadValue().beginParse();
-        var head = value.loadBits(bitNumber);
-        assert(!value.loadInt(1)) throw ALREADY_EXECUTED;
-        debug.print(899);
-        newValue = beginCell().storeSlice(head.loadBits(bitNumber)).storeBool(true).storeSlice(value);
-        debug.print(111111);
+        debug.printString("found");
+        var value = res.loadValue().load().value.beginParse();
+        debug.printString("found");   
+        debug.print(value);
+
+
+        var (tail, head) = value.loadTwoSlices(bitNumber);
+        debug.printString("tailint");
+        var m = head;
+        debug.print(tail);
+        debug.print(head);
+        assert(head.loadInt(1) == 0) throw ALREADY_EXECUTED;
+        
+        newValue = beginCell().storeSlice(tail).storeBool(true).storeSlice(head);
+        debug.print(newValue);
+ 
     } else {
         newValue = beginCell().storeZeroes(bitNumber).storeBool(true).storeZeroes(CELL_BIT_SIZE - bitNumber - 1);
+        debug.printString("else");
+        debug.print(newValue);
     }
 
     acceptExternalMessage();
     debug.print(44);
     queries.set(shift, MapVal {value: newValue.endCell()}.toCell());
-    debug.print(55);
+
+    debug.print(queries);
     self.queries = queries;
     debug.print(66);
     self.save();
@@ -113,6 +130,7 @@ type AllowedExternalMessageToWallet = ExternalInMsgBody;
 
 
 fun onInternalMessage(in: InMessage) {
+    debug.printString("internal message");
     val (bodyBits, bodyRefs) = in.body.remainingBitsAndRefsCount();
     if(!((bodyRefs == 1) & (bodyBits == MSG_OP_SIZE + MSG_QUERY_ID_SIZE))) {
         return();
@@ -133,24 +151,24 @@ fun onInternalMessage(in: InMessage) {
 }
 
 fun onExternalMessage(inMsg: slice) {
+   debug.printString("external message start");
    var signature = inMsg.getLastBits(512); // should be const above
 
 
 
-    var storage = lazy WalletStorage.load();
+   var storage = lazy WalletStorage.load();
     
 
-    debug.print(1212);
+    
     
     debug.print(1213);
     var oldQueries = storage.oldQueries;
     var queries = storage.queries;
+    debug.printString("before cleaning");
+    debug.print(storage.queries);
+    debug.print(storage.oldQueries);
 
-    // var oldQueries = storage.oldQueries.load().isEmpty()? storage.oldQueries.load(): createEmptyMap<uint13, slice>();
-
-    // var queries = storage.queries.load().isEmpty()? storage.oldQueries.load(): createEmptyMap<uint13, slice>();
     
-    debug.print(20);
     if (storage.lastCleanTime < (blockchain.now() - storage.timeout)) {
         (oldQueries, queries) = (queries, createEmptyMap<uint13, Cell<MapVal>>());
         if (storage.lastCleanTime < (blockchain.now() - (storage.timeout * 2))) {
@@ -171,7 +189,11 @@ fun onExternalMessage(inMsg: slice) {
 
     assert(innerSlice.createdAt > blockchain.now() - storage.timeout) throw INVALID_CREATED_AT;
     assert(innerSlice.createdAt <= blockchain.now()) throw INVALID_CREATED_AT;
-    debug.print(777);
+    debug.printString("before checking old queries");
+    debug.print(storage.queries);
+    debug.print(storage.oldQueries);
+    debug.print(innerSlice.queryId.shift);
+
     var resOld = oldQueries.get(innerSlice.queryId.shift);
     if (resOld.isFound) {
         debug.print(435);
@@ -182,17 +204,22 @@ fun onExternalMessage(inMsg: slice) {
 
         assert(!value.preloadInt(1)) throw ALREADY_EXECUTED;
     }
-    debug.print(775);
+
     storage.oldQueries = oldQueries;
     storage.queries = queries;
 
     storage.newBitValue(innerSlice.queryId.shift, innerSlice.queryId.bitNumber);
-    debug.print(77);
+
+
+    debug.printString("after new value");
+    debug.print(storage.queries);
     commitContractDataAndActions();
 
     var msgToSend = innerSlice.messageToSend.beginParse();
     debug.dumpStack();
+    
     assert(!msgToSend.loadUint(1)) throw INVALID_MESSAGE_TO_SEND;
+
     debug.dumpStack();
     if (msgToSend.loadUint(3) & 1) { 
         return();
