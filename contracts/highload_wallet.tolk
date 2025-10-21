@@ -47,44 +47,35 @@ struct ExternalInMsgBody {
 
 
 fun WalletStorage.newBitValue(mutate self, shift: uint13, bitNumber: uint10){
-    debug.printString("new bit check");
+    
 
     var queries = self.queries;
-    debug.print(queries);
-    debug.print(shift);
-    debug.print(bitNumber);
+
     var res = queries.get(shift);
+    var res2 = res;
     var newValue: builder? = null;
+    var value: slice? = null;
     if (res.isFound) {
-        debug.printString("found");
-        var value = res.loadValue().load().value.beginParse();
-        debug.printString("found");   
-        debug.print(value);
 
+        if ( res.loadValue().beginParse().remainingRefsCount() != 0){
+            value = res.loadValue().load().value.beginParse();
+        } else {
+            value = res.loadValue().beginParse();
+        }
 
-        var (tail, head) = value.loadTwoSlices(bitNumber);
-        debug.printString("tailint");
+        var (tail, head) = value!.loadTwoSlices(bitNumber);
         var m = head;
-        debug.print(tail);
-        debug.print(head);
         assert(head.loadInt(1) == 0) throw ALREADY_EXECUTED;
         
         newValue = beginCell().storeSlice(tail).storeBool(true).storeSlice(head);
-        debug.print(newValue);
- 
     } else {
         newValue = beginCell().storeZeroes(bitNumber).storeBool(true).storeZeroes(CELL_BIT_SIZE - bitNumber - 1);
-        debug.printString("else");
-        debug.print(newValue);
     }
 
     acceptExternalMessage();
-    debug.print(44);
-    queries.set(shift, MapVal {value: newValue.endCell()}.toCell());
 
-    debug.print(queries);
+    queries.set(shift, MapVal {value: newValue.endCell()}.toCell());
     self.queries = queries;
-    debug.print(66);
     self.save();
 }
 
@@ -130,7 +121,6 @@ type AllowedExternalMessageToWallet = ExternalInMsgBody;
 
 
 fun onInternalMessage(in: InMessage) {
-    debug.printString("internal message");
     val (bodyBits, bodyRefs) = in.body.remainingBitsAndRefsCount();
     if(!((bodyRefs == 1) & (bodyBits == MSG_OP_SIZE + MSG_QUERY_ID_SIZE))) {
         return();
@@ -151,24 +141,12 @@ fun onInternalMessage(in: InMessage) {
 }
 
 fun onExternalMessage(inMsg: slice) {
-   debug.printString("external message start");
    var signature = inMsg.getLastBits(512); // should be const above
-
-
-
    var storage = lazy WalletStorage.load();
     
-
-    
-    
-    debug.print(1213);
     var oldQueries = storage.oldQueries;
     var queries = storage.queries;
-    debug.printString("before cleaning");
-    debug.print(storage.queries);
-    debug.print(storage.oldQueries);
 
-    
     if (storage.lastCleanTime < (blockchain.now() - storage.timeout)) {
         (oldQueries, queries) = (queries, createEmptyMap<uint13, Cell<MapVal>>());
         if (storage.lastCleanTime < (blockchain.now() - (storage.timeout * 2))) {
@@ -189,17 +167,10 @@ fun onExternalMessage(inMsg: slice) {
 
     assert(innerSlice.createdAt > blockchain.now() - storage.timeout) throw INVALID_CREATED_AT;
     assert(innerSlice.createdAt <= blockchain.now()) throw INVALID_CREATED_AT;
-    debug.printString("before checking old queries");
-    debug.print(storage.queries);
-    debug.print(storage.oldQueries);
-    debug.print(innerSlice.queryId.shift);
 
     var resOld = oldQueries.get(innerSlice.queryId.shift);
     if (resOld.isFound) {
-        debug.print(435);
-        debug.dumpStack();
         var value = resOld.loadValue().beginParse();
-        debug.print(434);
         value.skipBits(innerSlice.queryId.bitNumber);
 
         assert(!value.preloadInt(1)) throw ALREADY_EXECUTED;
@@ -211,31 +182,24 @@ fun onExternalMessage(inMsg: slice) {
     storage.newBitValue(innerSlice.queryId.shift, innerSlice.queryId.bitNumber);
 
 
-    debug.printString("after new value");
-    debug.print(storage.queries);
+
     commitContractDataAndActions();
 
     var msgToSend = innerSlice.messageToSend.beginParse();
-    debug.dumpStack();
     
     assert(!msgToSend.loadUint(1)) throw INVALID_MESSAGE_TO_SEND;
 
-    debug.dumpStack();
     if (msgToSend.loadUint(3) & 1) { 
         return();
     }
-    debug.dumpStack();
-    debug.print(88);
+
     assert (msgToSend.loadAddress().isNone()) throw INVALID_MESSAGE_TO_SEND;
-    debug.dumpStack();
     var destination = msgToSend.loadAddress();
     val valueToSend = msgToSend.loadCoins();
-    debug.print(89);
     msgToSend.skipDict();
     msgToSend.loadCoins();
     msgToSend.loadCoins();
     msgToSend.skipBits(64 + 32);
-    debug.print(99);
     assert(!msgToSend.loadUint(1)) throw INVALID_MESSAGE_TO_SEND;
     if (msgToSend.loadInt(1)) {
         msgToSend.loadRef();

@@ -67,12 +67,12 @@ describe('HighloadWalletV3', () => {
     beforeEach(async () => {
         blockchain = await Blockchain.create();
         blockchain.now = 1000;
-    //     blockchain.verbosity = {
-    //          print: true,
-    //          blockchainLogs: true,
-    //          vmLogs:   "vm_logs",
-    //          debugLogs: true,
-    //    }
+        //  blockchain.verbosity = {
+        //       print: true,
+        //       blockchainLogs: true,
+        //       vmLogs: "vm_logs_gas",
+        //       debugLogs: true,
+        // }
 
         highloadWalletV3 = blockchain.openContract(
             HighloadWalletV3.createFromConfig(
@@ -240,9 +240,6 @@ describe('HighloadWalletV3', () => {
         expect(await highloadWalletV3.getProcessed(queryId)).toBe(true);
 
         const getter = await highloadWalletV3.getProcessed(queryId);
-        console.log("======================================");
-        console.log(getter);
-        console.log("======================================");
 
         await shouldRejectWith(highloadWalletV3.sendExternalMessage(
             keyPair.secretKey,
