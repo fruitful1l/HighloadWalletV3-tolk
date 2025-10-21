@@ -1,0 +1,303 @@
+{
+  "label": "tolk test",
+  "createdAt": "2025-10-21T00:55:09.525Z",
+  "items": [
+    {
+      "testName": "HighloadWalletV3 should deploy",
+      "address": "EQBGhqLAZseEqRXz4ByFPTGV7SVMlI4hrbs-Sps_Xzx01x8G",
+      "codeHash": "0xb02a9bda92a3c763d0a62e0a19a171350b2ed6d6afa7f079a498da9b5c40241b",
+      "contractName": "HighloadWalletV3",
+      "methodName": "sendDeploy",
+      "receiver": "external-in",
+      "opCode": "0x0",
+      "execute": {
+        "compute": {
+          "type": "vm",
+          "success": true,
+          "gasUsed": 1937,
+          "exitCode": 0,
+          "vmSteps": 50
+        },
+        "action": {
+          "success": true,
+          "totalActions": 1,
+          "skippedActions": 0,
+          "resultCode": 0,
+          "totalActionFees": 1,
+          "totalFwdFees": 3298000,
+          "totalMessageSize": {
+            "cells": 19,
+            "bits": 6180
+          }
+        }
+      },
+      "message": {
+        "in": {
+          "cells": 21,
+          "bits": 6441
+        },
+        "out": {
+          "cells": 20,
+          "bits": 6187
+        }
+      },
+      "state": {
+        "code": {
+          "cells": 17,
+          "bits": 5069
+        },
+        "data": {
+          "cells": 1,
+          "bits": 376
+        }
+      }
+    },
+    {
+      "testName": "HighloadWalletV3 should deploy",
+      "address": "EQCGxPEES4CGOPUir7ebiEHGbt94QmnQoEcweSUeTqJAVso0",
+      "codeHash": "0xb02a9bda92a3c763d0a62e0a19a171350b2ed6d6afa7f079a498da9b5c40241b",
+      "contractName": "HighloadWalletV3",
+      "methodName": "send",
+      "receiver": "internal",
+      "opCode": "0x0",
+      "execute": {
+        "compute": {
+          "type": "vm",
+          "success": true,
+          "gasUsed": 629,
+          "exitCode": 0,
+          "vmSteps": 15
+        },
+        "action": {
+          "success": true,
+          "totalActions": 0,
+          "skippedActions": 0,
+          "resultCode": 0,
+          "totalActionFees": 0,
+          "totalMessageSize": {
+            "cells": 0,
+            "bits": 0
+          }
+        }
+      },
+      "message": {
+        "in": {
+          "cells": 19,
+          "bits": 6180
+        },
+        "out": {
+          "cells": 0,
+          "bits": 0
+        }
+      },
+      "state": {
+        "code": {
+          "cells": 17,
+          "bits": 5069
+        },
+        "data": {
+          "cells": 1,
+          "bits": 376
+        }
+      }
+    },
+    {
+      "testName": "HighloadWalletV3 should pass check sign",
+      "address": "EQBGhqLAZseEqRXz4ByFPTGV7SVMlI4hrbs-Sps_Xzx01x8G",
+      "codeHash": "0xb02a9bda92a3c763d0a62e0a19a171350b2ed6d6afa7f079a498da9b5c40241b",
+      "contractName": "HighloadWalletV3",
+      "methodName": "sendDeploy",
+      "receiver": "external-in",
+      "opCode": "0x0",
+      "execute": {
+        "compute": {
+          "type": "vm",
+          "success": true,
+          "gasUsed": 1937,
+          "exitCode": 0,
+          "vmSteps": 50
+        },
+        "action": {
+          "success": true,
+          "totalActions": 1,
+          "skippedActions": 0,
+          "resultCode": 0,
+          "totalActionFees": 1,
+          "totalFwdFees": 3298000,
+          "totalMessageSize": {
+            "cells": 19,
+            "bits": 6180
+          }
+        }
+      },
+      "message": {
+        "in": {
+          "cells": 21,
+          "bits": 6441
+        },
+        "out": {
+          "cells": 20,
+          "bits": 6187
+        }
+      },
+      "state": {
+        "code": {
+          "cells": 17,
+          "bits": 5069
+        },
+        "data": {
+          "cells": 1,
+          "bits": 376
+        }
+      }
+    },
+    {
+      "testName": "HighloadWalletV3 should pass check sign",
+      "address": "EQCGxPEES4CGOPUir7ebiEHGbt94QmnQoEcweSUeTqJAVso0",
+      "codeHash": "0xb02a9bda92a3c763d0a62e0a19a171350b2ed6d6afa7f079a498da9b5c40241b",
+      "contractName": "HighloadWalletV3",
+      "methodName": "send",
+      "receiver": "internal",
+      "opCode": "0x0",
+      "execute": {
+        "compute": {
+          "type": "vm",
+          "success": true,
+          "gasUsed": 629,
+          "exitCode": 0,
+          "vmSteps": 15
+        },
+        "action": {
+          "success": true,
+          "totalActions": 0,
+          "skippedActions": 0,
+          "resultCode": 0,
+          "totalActionFees": 0,
+          "totalMessageSize": {
+            "cells": 0,
+            "bits": 0
+          }
+        }
+      },
+      "message": {
+        "in": {
+          "cells": 19,
+          "bits": 6180
+        },
+        "out": {
+          "cells": 0,
+          "bits": 0
+        }
+      },
+      "state": {
+        "code": {
+          "cells": 17,
+          "bits": 5069
+        },
+        "data": {
+          "cells": 1,
+          "bits": 376
+        }
+      }
+    },
+    {
+      "testName": "HighloadWalletV3 should pass check sign",
+      "address": "EQCGxPEES4CGOPUir7ebiEHGbt94QmnQoEcweSUeTqJAVso0",
+      "codeHash": "0xb02a9bda92a3c763d0a62e0a19a171350b2ed6d6afa7f079a498da9b5c40241b",
+      "contractName": "HighloadWalletV3",
+      "methodName": "sendExternalMessage",
+      "receiver": "external-in",
+      "opCode": "0x0",
+      "execute": {
+        "compute": {
+          "type": "vm",
+          "success": true,
+          "gasUsed": 7874,
+          "exitCode": 0,
+          "vmSteps": 212
+        },
+        "action": {
+          "success": true,
+          "totalActions": 1,
+          "skippedActions": 0,
+          "resultCode": 0,
+          "totalActionFees": 1,
+          "totalFwdFees": 440000,
+          "totalMessageSize": {
+            "cells": 2,
+            "bits": 825
+          }
+        }
+      },
+      "message": {
+        "in": {
+          "cells": 4,
+          "bits": 1418
+        },
+        "out": {
+          "cells": 3,
+          "bits": 832
+        }
+      },
+      "state": {
+        "code": {
+          "cells": 17,
+          "bits": 5069
+        },
+        "data": {
+          "cells": 1,
+          "bits": 376
+        }
+      }
+    },
+    {
+      "testName": "HighloadWalletV3 should pass check sign",
+      "address": "EQCGxPEES4CGOPUir7ebiEHGbt94QmnQoEcweSUeTqJAVso0",
+      "codeHash": "0xb02a9bda92a3c763d0a62e0a19a171350b2ed6d6afa7f079a498da9b5c40241b",
+      "receiver": "internal",
+      "opCode": "0xae42e5a4",
+      "execute": {
+        "compute": {
+          "type": "vm",
+          "success": true,
+          "gasUsed": 1466,
+          "exitCode": 0,
+          "vmSteps": 29
+        },
+        "action": {
+          "success": true,
+          "totalActions": 1,
+          "skippedActions": 0,
+          "resultCode": 0,
+          "totalActionFees": 1,
+          "totalMessageSize": {
+            "cells": 0,
+            "bits": 0
+          }
+        }
+      },
+      "message": {
+        "in": {
+          "cells": 2,
+          "bits": 825
+        },
+        "out": {
+          "cells": 0,
+          "bits": 0
+        }
+      },
+      "state": {
+        "code": {
+          "cells": 17,
+          "bits": 5069
+        },
+        "data": {
+          "cells": 1,
+          "bits": 376
+        }
+      },
+      "contractName": "HighloadWalletV3",
+      "methodName": "0xae42e5a4"
+    }
+  ]
+}

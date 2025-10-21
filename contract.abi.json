@@ -1,0 +1,22 @@
+{
+  "0xcec4d600b60e00f1e655810b8b7c081eeb810b17a9109672cb94c631c5a68f32": "HighloadWalletV3",
+  "0xb02a9bda92a3c763d0a62e0a19a171350b2ed6d6afa7f079a498da9b5c40241b": "HighloadWalletV3",
+  "HighloadWalletV3": {
+    "receivers": [
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xae42e5a4"
+        }
+      }
+    ],
+    "types": [
+      {
+        "name": "0xae42e5a4",
+        "header": 2923619748
+      }
+    ],
+    "name": "HighloadWalletV3"
+  }
+}

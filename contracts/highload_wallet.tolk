@@ -14,13 +14,6 @@ const ALREADY_EXECUTED: int = 36;
 const INVALID_MESSAGE_TO_SEND: int= 37;
 const INVALID_TIMEOUT: int= 38;
 
-const KEY_SIZE: int = 13;
-const SIGNATURE_SIZE: int = 512;
-const PUBLIC_KEY_SIZE: int = 256;
-const SUBWALLET_ID_SIZE: int = 32;
-const TIMESTAMP_SIZE: int = 64;
-const TIMEOUT_SIZE: int = 22; // 2^22 / 60 / 60 / 24 - up to ~48 days
-
 const CELL_BIT_SIZE: int = 1023;
 const BIT_NUMBER_SIZE: int = 10; // 2^10 = 1024
 const MSG_QUERY_ID_SIZE: int = 64;
@@ -54,32 +47,39 @@ struct ExternalInMsgBody {
 
 @inline
 fun WalletStorage.newBitValue(mutate self, shift: uint13, bitNumber: uint10){
-    var res = self.queries.get(shift);
+    debug.print(11111111);
+    var queries = self.queries;
+    var res = queries.get(shift);
     var newValue: builder? = null;
     if (res.isFound) {
-        var value = res.loadValue();
-        var valueSlice = value;
-        valueSlice.skipBits(bitNumber);
-        assert (!valueSlice.preloadInt(1)) throw ALREADY_EXECUTED;
-
-        newValue = beginCell().storeSlice(value.loadBits(bitNumber)).storeBool(true).storeSlice(value);
-
+        var value = res.loadValue().beginParse();
+        var head = value.loadBits(bitNumber);
+        assert(!value.loadInt(1)) throw ALREADY_EXECUTED;
+        debug.print(899);
+        newValue = beginCell().storeSlice(head.loadBits(bitNumber)).storeBool(true).storeSlice(value);
+        debug.print(111111);
     } else {
         newValue = beginCell().storeZeroes(bitNumber).storeBool(true).storeZeroes(CELL_BIT_SIZE - bitNumber - 1);
     }
 
     acceptExternalMessage();
-    self.queries.set(shift, newValue.endCell().beginParse());
+    debug.print(44);
+    queries.set(shift, MapVal {value: newValue.endCell()}.toCell());
+    debug.print(55);
+    self.queries = queries;
+    debug.print(66);
     self.save();
 }
 
-
+struct MapVal {
+    value: cell;
+}
 
 struct WalletStorage {
     publicKey: uint256;
     subwalletId: uint32;
-    oldQueries: map<uint13, slice>;
-    queries: map<uint13, slice>;
+    oldQueries: map<uint13, Cell<MapVal>>;
+    queries: map<uint13, Cell<MapVal>>;
     lastCleanTime: int64;
     timeout: int22;
 }
@@ -133,13 +133,28 @@ fun onInternalMessage(in: InMessage) {
 }
 
 fun onExternalMessage(inMsg: slice) {
-    var signature = inMsg.getLastBits(512); // should be const above
-    
+   var signature = inMsg.getLastBits(512); // should be const above
+
+
+
     var storage = lazy WalletStorage.load();
+    
+
+    debug.print(1212);
+    
+    debug.print(1213);
+    var oldQueries = storage.oldQueries;
+    var queries = storage.queries;
+
+    // var oldQueries = storage.oldQueries.load().isEmpty()? storage.oldQueries.load(): createEmptyMap<uint13, slice>();
+
+    // var queries = storage.queries.load().isEmpty()? storage.oldQueries.load(): createEmptyMap<uint13, slice>();
+    
+    debug.print(20);
     if (storage.lastCleanTime < (blockchain.now() - storage.timeout)) {
-        (storage.oldQueries, storage.queries) = (storage.queries, createEmptyMap());
+        (oldQueries, queries) = (queries, createEmptyMap<uint13, Cell<MapVal>>());
         if (storage.lastCleanTime < (blockchain.now() - (storage.timeout * 2))) {
-            storage.oldQueries = createEmptyMap();
+            oldQueries = createEmptyMap();
         }
         storage.lastCleanTime = blockchain.now();
     }
@@ -156,46 +171,52 @@ fun onExternalMessage(inMsg: slice) {
 
     assert(innerSlice.createdAt > blockchain.now() - storage.timeout) throw INVALID_CREATED_AT;
     assert(innerSlice.createdAt <= blockchain.now()) throw INVALID_CREATED_AT;
-
-    var resOld = storage.oldQueries.get(innerSlice.queryId.shift);
+    debug.print(777);
+    var resOld = oldQueries.get(innerSlice.queryId.shift);
     if (resOld.isFound) {
-        var value = resOld.loadValue();
+        debug.print(435);
+        debug.dumpStack();
+        var value = resOld.loadValue().beginParse();
+        debug.print(434);
         value.skipBits(innerSlice.queryId.bitNumber);
+
         assert(!value.preloadInt(1)) throw ALREADY_EXECUTED;
     }
+    debug.print(775);
+    storage.oldQueries = oldQueries;
+    storage.queries = queries;
 
     storage.newBitValue(innerSlice.queryId.shift, innerSlice.queryId.bitNumber);
-
+    debug.print(77);
     commitContractDataAndActions();
 
     var msgToSend = innerSlice.messageToSend.beginParse();
+    debug.dumpStack();
     assert(!msgToSend.loadUint(1)) throw INVALID_MESSAGE_TO_SEND;
-    
-    if (msgToSend.loadMessageFlags() & 1) { 
+    debug.dumpStack();
+    if (msgToSend.loadUint(3) & 1) { 
         return();
     }
-    
+    debug.dumpStack();
+    debug.print(88);
     assert (msgToSend.loadAddress().isNone()) throw INVALID_MESSAGE_TO_SEND;
-    msgToSend.loadAddress();
+    debug.dumpStack();
+    var destination = msgToSend.loadAddress();
     val valueToSend = msgToSend.loadCoins();
+    debug.print(89);
     msgToSend.skipDict();
     msgToSend.loadCoins();
     msgToSend.loadCoins();
     msgToSend.skipBits(64 + 32);
-    assert(msgToSend.loadUint(1)) throw INVALID_MESSAGE_TO_SEND;
+    debug.print(99);
+    assert(!msgToSend.loadUint(1)) throw INVALID_MESSAGE_TO_SEND;
     if (msgToSend.loadInt(1)) {
         msgToSend.loadRef();
         msgToSend.assertEnd();
     }
 
-    val msgToSelf = createMessage({
-        bounce: false,
-        value: valueToSend,
-        dest: contract.getAddress(),
-        body: InternalTransfer.fromCell(innerSlice.messageToSend),
-    });
-
-    msgToSelf.send(innerSlice.sendMode | SEND_MODE_IGNORE_ERRORS);
+    var output = OutMessage { messageCell: innerSlice.messageToSend };
+    output.send(innerSlice.sendMode | SEND_MODE_IGNORE_ERRORS);
     return();
 }
 
@@ -225,29 +246,35 @@ fun isProcessed(queryId: int, needClean: int): int {
     var bitNumber = queryId & CELL_BIT_SIZE;
 
     var storage = lazy WalletStorage.load();
+    var oldQueries = storage.oldQueries;
+    var queries = storage.queries;
 
     if (needClean) {
         if (storage.lastCleanTime < (blockchain.now() - storage.timeout)) {
-            (storage.oldQueries, storage.queries) = (storage.queries, createEmptyMap());
+            (oldQueries, queries) = (queries, createEmptyMap());
             if (storage.lastCleanTime < (blockchain.now() - (storage.timeout * 2))) {
-                storage.oldQueries = createEmptyMap();
+                oldQueries = createEmptyMap();
             }
             storage.lastCleanTime = blockchain.now();
         }
     }
+    
+    storage.queries = queries;
+    storage.oldQueries = oldQueries;
+    storage.save();
 
-    var resOld = storage.oldQueries.get(shift);
+    var resOld = oldQueries.get(shift);
     if (resOld.isFound) {
-        var value = resOld.loadValue();
+        var value = resOld.loadValue().load().value.beginParse();
         value.skipBits(bitNumber);
         if (value.preloadInt(1)) {
             return -1;
         }
     }
 
-    var res = storage.queries.get(shift);
+    var res = queries.get(shift);
     if (res.isFound) {
-        var valueCurrent = resOld.loadValue();
+        var valueCurrent = res.loadValue().load().value.beginParse();
         valueCurrent.skipBits(bitNumber);
         if (valueCurrent.preloadInt(1)) {
             return -1;
