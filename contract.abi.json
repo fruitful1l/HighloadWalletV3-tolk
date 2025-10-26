@@ -2,6 +2,7 @@
   "0xcec4d600b60e00f1e655810b8b7c081eeb810b17a9109672cb94c631c5a68f32": "HighloadWalletV3",
   "0xb02a9bda92a3c763d0a62e0a19a171350b2ed6d6afa7f079a498da9b5c40241b": "HighloadWalletV3",
   "0xbb39f7cb6b1f4155c45b8708d663823fb2c324a92670fea8c4d2fb233033ce26": "HighloadWalletV3",
+  "0xdfc7ad4407e55c303248ea1bcda0b3f9e2610ea48f27795963b77438f7079aa8": "HighloadWalletV3",
   "HighloadWalletV3": {
     "receivers": [
       {
@@ -23,6 +24,41 @@
         "message": {
           "kind": "typed",
           "type": "0x83abf"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "notSupported"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xae42e5a4"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xf880"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x57d91"
         }
       },
       {
@@ -2010,20 +2046,6 @@
         "receiver": "internal",
         "message": {
           "kind": "typed",
-          "type": "0x49e20"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x7b463"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
           "type": "0x11b"
         }
       },
@@ -3076,461 +3098,21 @@
           "kind": "typed",
           "type": "0x1b1"
         }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1b2"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1b3"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1b4"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1b5"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1b6"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1b7"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1b8"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1b9"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1ba"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1bb"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1bc"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1bd"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1be"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1bf"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1c0"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1c1"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1c2"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1c3"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1c4"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1c5"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1c6"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1c7"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1c8"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1c9"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1ca"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1cb"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1cc"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1cd"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1ce"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1cf"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1d0"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1d1"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1d2"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1d3"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1d4"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1d5"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1d6"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1d7"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1d8"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1d9"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1da"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1db"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1dc"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1dd"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1de"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1df"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1e0"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1e1"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1e2"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1e3"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1e4"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1e5"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1e6"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1e7"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1e8"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1e9"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1ea"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1eb"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1ec"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1ed"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x1ee"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x39874"
-        }
-      },
-      {
-        "receiver": "internal",
-        "message": {
-          "kind": "typed",
-          "type": "0x7106c"
-        }
       }
     ],
+    "name": "HighloadWalletV3",
     "types": [
       {
         "name": "0xae42e5a4",
         "header": 2923619748
       },
       {
-        "name": "0xba1a9",
-        "header": 762281
+        "name": "0xf880",
+        "header": 63616
       },
       {
-        "name": "0x83abf",
-        "header": 539327
+        "name": "0x57d91",
+        "header": 359825
       },
       {
         "name": "notSupported",
@@ -4665,14 +4247,6 @@
         "header": 282
       },
       {
-        "name": "0x49e20",
-        "header": 302624
-      },
-      {
-        "name": "0x7b463",
-        "header": 504931
-      },
-      {
         "name": "0x11b",
         "header": 283
       },
@@ -5275,260 +4849,7 @@
       {
         "name": "0x1b1",
         "header": 433
-      },
-      {
-        "name": "0x1b2",
-        "header": 434
-      },
-      {
-        "name": "0x1b3",
-        "header": 435
-      },
-      {
-        "name": "0x1b4",
-        "header": 436
-      },
-      {
-        "name": "0x1b5",
-        "header": 437
-      },
-      {
-        "name": "0x1b6",
-        "header": 438
-      },
-      {
-        "name": "0x1b7",
-        "header": 439
-      },
-      {
-        "name": "0x1b8",
-        "header": 440
-      },
-      {
-        "name": "0x1b9",
-        "header": 441
-      },
-      {
-        "name": "0x1ba",
-        "header": 442
-      },
-      {
-        "name": "0x1bb",
-        "header": 443
-      },
-      {
-        "name": "0x1bc",
-        "header": 444
-      },
-      {
-        "name": "0x1bd",
-        "header": 445
-      },
-      {
-        "name": "0x1be",
-        "header": 446
-      },
-      {
-        "name": "0x1bf",
-        "header": 447
-      },
-      {
-        "name": "0x1c0",
-        "header": 448
-      },
-      {
-        "name": "0x1c1",
-        "header": 449
-      },
-      {
-        "name": "0x1c2",
-        "header": 450
-      },
-      {
-        "name": "0x1c3",
-        "header": 451
-      },
-      {
-        "name": "0x1c4",
-        "header": 452
-      },
-      {
-        "name": "0x1c5",
-        "header": 453
-      },
-      {
-        "name": "0x1c6",
-        "header": 454
-      },
-      {
-        "name": "0x1c7",
-        "header": 455
-      },
-      {
-        "name": "0x1c8",
-        "header": 456
-      },
-      {
-        "name": "0x1c9",
-        "header": 457
-      },
-      {
-        "name": "0x1ca",
-        "header": 458
-      },
-      {
-        "name": "0x1cb",
-        "header": 459
-      },
-      {
-        "name": "0x1cc",
-        "header": 460
-      },
-      {
-        "name": "0x1cd",
-        "header": 461
-      },
-      {
-        "name": "0x1ce",
-        "header": 462
-      },
-      {
-        "name": "0x1cf",
-        "header": 463
-      },
-      {
-        "name": "0x1d0",
-        "header": 464
-      },
-      {
-        "name": "0x1d1",
-        "header": 465
-      },
-      {
-        "name": "0x1d2",
-        "header": 466
-      },
-      {
-        "name": "0x1d3",
-        "header": 467
-      },
-      {
-        "name": "0x1d4",
-        "header": 468
-      },
-      {
-        "name": "0x1d5",
-        "header": 469
-      },
-      {
-        "name": "0x1d6",
-        "header": 470
-      },
-      {
-        "name": "0x1d7",
-        "header": 471
-      },
-      {
-        "name": "0x1d8",
-        "header": 472
-      },
-      {
-        "name": "0x1d9",
-        "header": 473
-      },
-      {
-        "name": "0x1da",
-        "header": 474
-      },
-      {
-        "name": "0x1db",
-        "header": 475
-      },
-      {
-        "name": "0x1dc",
-        "header": 476
-      },
-      {
-        "name": "0x1dd",
-        "header": 477
-      },
-      {
-        "name": "0x1de",
-        "header": 478
-      },
-      {
-        "name": "0x1df",
-        "header": 479
-      },
-      {
-        "name": "0x1e0",
-        "header": 480
-      },
-      {
-        "name": "0x1e1",
-        "header": 481
-      },
-      {
-        "name": "0x1e2",
-        "header": 482
-      },
-      {
-        "name": "0x1e3",
-        "header": 483
-      },
-      {
-        "name": "0x1e4",
-        "header": 484
-      },
-      {
-        "name": "0x1e5",
-        "header": 485
-      },
-      {
-        "name": "0x1e6",
-        "header": 486
-      },
-      {
-        "name": "0x1e7",
-        "header": 487
-      },
-      {
-        "name": "0x1e8",
-        "header": 488
-      },
-      {
-        "name": "0x1e9",
-        "header": 489
-      },
-      {
-        "name": "0x1ea",
-        "header": 490
-      },
-      {
-        "name": "0x1eb",
-        "header": 491
-      },
-      {
-        "name": "0x1ec",
-        "header": 492
-      },
-      {
-        "name": "0x1ed",
-        "header": 493
-      },
-      {
-        "name": "0x1ee",
-        "header": 494
-      },
-      {
-        "name": "0x39874",
-        "header": 235636
-      },
-      {
-        "name": "0x7106c",
-        "header": 462956
       }
-    ],
-    "name": "HighloadWalletV3"
+    ]
   }
 }

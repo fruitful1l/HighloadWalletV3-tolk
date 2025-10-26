@@ -39,16 +39,15 @@ fun InternalTransfer.unpackFromSlice(mutate s: slice) {
     s.assertEnd();
     return body;
 }
+
 struct ExternalInMsgBody {
    body: Cell<MsgInner>;
 }   
 
 
-
-
 fun WalletStorage.newBitValue(mutate self, shift: uint13, bitNumber: uint10){
     
-
+    debug.printString("NewBit val");
     var queries = self.queries;
 
     var res = queries.get(shift);
@@ -56,13 +55,11 @@ fun WalletStorage.newBitValue(mutate self, shift: uint13, bitNumber: uint10){
     var newValue: builder? = null;
     var value: slice? = null;
     if (res.isFound) {
+      
+        value = res.loadValue().beginParse();
 
-        if ( res.loadValue().beginParse().remainingRefsCount() != 0){
-            value = res.loadValue().load().value.beginParse();
-        } else {
-            value = res.loadValue().beginParse();
-        }
-
+        debug.printString("value: ");
+        debug.print(value);
         var (tail, head) = value!.loadTwoSlices(bitNumber);
         var m = head;
         assert(head.loadInt(1) == 0) throw ALREADY_EXECUTED;
@@ -74,20 +71,17 @@ fun WalletStorage.newBitValue(mutate self, shift: uint13, bitNumber: uint10){
 
     acceptExternalMessage();
 
-    queries.set(shift, MapVal {value: newValue.endCell()}.toCell());
+    queries.set(shift, newValue.endCell());
     self.queries = queries;
     self.save();
 }
 
-struct MapVal {
-    value: cell;
-}
 
 struct WalletStorage {
     publicKey: uint256;
     subwalletId: uint32;
-    oldQueries: map<uint13, Cell<MapVal>>;
-    queries: map<uint13, Cell<MapVal>>;
+    oldQueries: map<uint13, cell>;
+    queries: map<uint13, cell>;
     lastCleanTime: int64;
     timeout: int22;
 }
@@ -121,6 +115,7 @@ type AllowedExternalMessageToWallet = ExternalInMsgBody;
 
 
 fun onInternalMessage(in: InMessage) {
+    debug.printString("Internal message");
     val (bodyBits, bodyRefs) = in.body.remainingBitsAndRefsCount();
     if(!((bodyRefs == 1) & (bodyBits == MSG_OP_SIZE + MSG_QUERY_ID_SIZE))) {
         return();
@@ -141,6 +136,7 @@ fun onInternalMessage(in: InMessage) {
 }
 
 fun onExternalMessage(inMsg: slice) {
+    debug.printString("External message");
    var signature = inMsg.getLastBits(512); // should be const above
    var storage = lazy WalletStorage.load();
     
@@ -148,7 +144,7 @@ fun onExternalMessage(inMsg: slice) {
     var queries = storage.queries;
 
     if (storage.lastCleanTime < (blockchain.now() - storage.timeout)) {
-        (oldQueries, queries) = (queries, createEmptyMap<uint13, Cell<MapVal>>());
+        (oldQueries, queries) = (queries, createEmptyMap<uint13, cell>());
         if (storage.lastCleanTime < (blockchain.now() - (storage.timeout * 2))) {
             oldQueries = createEmptyMap();
         }
@@ -168,6 +164,7 @@ fun onExternalMessage(inMsg: slice) {
     assert(innerSlice.createdAt > blockchain.now() - storage.timeout) throw INVALID_CREATED_AT;
     assert(innerSlice.createdAt <= blockchain.now()) throw INVALID_CREATED_AT;
 
+    debug.printString("External checks");
     var resOld = oldQueries.get(innerSlice.queryId.shift);
     if (resOld.isFound) {
         var value = resOld.loadValue().beginParse();
@@ -256,7 +253,7 @@ fun isProcessed(queryId: int, needClean: int): int {
 
     var resOld = oldQueries.get(shift);
     if (resOld.isFound) {
-        var value = resOld.loadValue().load().value.beginParse();
+        var value = resOld.loadValue().beginParse();
         value.skipBits(bitNumber);
         if (value.preloadInt(1)) {
             return -1;
@@ -265,7 +262,7 @@ fun isProcessed(queryId: int, needClean: int): int {
 
     var res = queries.get(shift);
     if (res.isFound) {
-        var valueCurrent = res.loadValue().load().value.beginParse();
+        var valueCurrent = res.loadValue().beginParse();
         valueCurrent.skipBits(bitNumber);
         if (valueCurrent.preloadInt(1)) {
             return -1;
