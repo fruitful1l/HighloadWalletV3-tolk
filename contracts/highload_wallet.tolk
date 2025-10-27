@@ -26,56 +26,9 @@ struct (0xae42e5a4) InternalTransfer {
     actions: Cell<Outlist>;
 }
 
-fun InternalTransfer.unpackFromSlice(mutate s: slice) {
-    s.loadUint(3);
-    s.loadAddress();
-    s.loadAddress();
-    s.loadCoins();
-    s.skipDict();
-    s.loadCoins();
-    s.loadCoins();
-    s.skipBits(64 + 32);
-    var body = s.loadInt(1)? s.loadRef(): null;
-    s.assertEnd();
-    return body;
-}
-
 struct ExternalInMsgBody {
    body: Cell<MsgInner>;
 }   
-
-
-fun WalletStorage.newBitValue(mutate self, shift: uint13, bitNumber: uint10){
-    
-    debug.printString("NewBit val");
-    var queries = self.queries;
-
-    var res = queries.get(shift);
-    var res2 = res;
-    var newValue: builder? = null;
-    var value: slice? = null;
-    if (res.isFound) {
-      
-        value = res.loadValue().beginParse();
-
-        debug.printString("value: ");
-        debug.print(value);
-        var (tail, head) = value!.loadTwoSlices(bitNumber);
-        var m = head;
-        assert(head.loadInt(1) == 0) throw ALREADY_EXECUTED;
-        
-        newValue = beginCell().storeSlice(tail).storeBool(true).storeSlice(head);
-    } else {
-        newValue = beginCell().storeZeroes(bitNumber).storeBool(true).storeZeroes(CELL_BIT_SIZE - bitNumber - 1);
-    }
-
-    acceptExternalMessage();
-
-    queries.set(shift, newValue.endCell());
-    self.queries = queries;
-    self.save();
-}
-
 
 struct WalletStorage {
     publicKey: uint256;
@@ -115,7 +68,6 @@ type AllowedExternalMessageToWallet = ExternalInMsgBody;
 
 
 fun onInternalMessage(in: InMessage) {
-    debug.printString("Internal message");
     val (bodyBits, bodyRefs) = in.body.remainingBitsAndRefsCount();
     if(!((bodyRefs == 1) & (bodyBits == MSG_OP_SIZE + MSG_QUERY_ID_SIZE))) {
         return();
@@ -136,17 +88,13 @@ fun onInternalMessage(in: InMessage) {
 }
 
 fun onExternalMessage(inMsg: slice) {
-    debug.printString("External message");
    var signature = inMsg.getLastBits(512); // should be const above
    var storage = lazy WalletStorage.load();
     
-    var oldQueries = storage.oldQueries;
-    var queries = storage.queries;
-
     if (storage.lastCleanTime < (blockchain.now() - storage.timeout)) {
-        (oldQueries, queries) = (queries, createEmptyMap<uint13, cell>());
+        (storage.oldQueries, storage.queries) = (storage.queries, createEmptyMap<uint13, cell>());
         if (storage.lastCleanTime < (blockchain.now() - (storage.timeout * 2))) {
-            oldQueries = createEmptyMap();
+            storage.oldQueries = createEmptyMap();
         }
         storage.lastCleanTime = blockchain.now();
     }
@@ -164,8 +112,7 @@ fun onExternalMessage(inMsg: slice) {
     assert(innerSlice.createdAt > blockchain.now() - storage.timeout) throw INVALID_CREATED_AT;
     assert(innerSlice.createdAt <= blockchain.now()) throw INVALID_CREATED_AT;
 
-    debug.printString("External checks");
-    var resOld = oldQueries.get(innerSlice.queryId.shift);
+    var resOld = storage.oldQueries.get(innerSlice.queryId.shift);
     if (resOld.isFound) {
         var value = resOld.loadValue().beginParse();
         value.skipBits(innerSlice.queryId.bitNumber);
@@ -173,11 +120,27 @@ fun onExternalMessage(inMsg: slice) {
         assert(!value.preloadInt(1)) throw ALREADY_EXECUTED;
     }
 
-    storage.oldQueries = oldQueries;
-    storage.queries = queries;
 
-    storage.newBitValue(innerSlice.queryId.shift, innerSlice.queryId.bitNumber);
+    var res = storage.queries.get(innerSlice.queryId.shift);
+    var newValue: builder? = null;
+    var value: slice? = null;
+    if (res.isFound) {
+        
+        value = res.loadValue().beginParse();
+        
+        var (tail, head) = value!.loadTwoSlices(innerSlice.queryId.bitNumber);
+        var m = head;
+        assert(head.loadInt(1) == 0) throw ALREADY_EXECUTED;
+        
+        newValue = beginCell().storeSlice(tail).storeBool(true).storeSlice(head);
+    } else {
+        newValue = beginCell().storeZeroes(innerSlice.queryId.bitNumber).storeBool(true).storeZeroes(CELL_BIT_SIZE - innerSlice.queryId.bitNumber - 1);
+    }
 
+    acceptExternalMessage();
+
+    storage.queries.set(innerSlice.queryId.shift, newValue.endCell());
+    storage.save();
 
 
     commitContractDataAndActions();

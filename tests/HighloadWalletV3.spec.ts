@@ -1,3 +1,4 @@
+
 import { Blockchain, EmulationError, SandboxContract, createShardAccount, internal } from '@ton/sandbox';
 import { beginCell, Cell, SendMode, toNano, Address, internal as internal_relaxed, Dictionary, BitString, OutActionSendMsg } from '@ton/core';
 import {HighloadWalletV3, TIMEOUT_SIZE, TIMESTAMP_SIZE} from '../wrappers/HighloadWalletV3';
@@ -945,4 +946,3 @@ describe('HighloadWalletV3', () => {
 //     });
 
 });
-
