@@ -3,6 +3,8 @@
   "0xb02a9bda92a3c763d0a62e0a19a171350b2ed6d6afa7f079a498da9b5c40241b": "HighloadWalletV3",
   "0xbb39f7cb6b1f4155c45b8708d663823fb2c324a92670fea8c4d2fb233033ce26": "HighloadWalletV3",
   "0xdfc7ad4407e55c303248ea1bcda0b3f9e2610ea48f27795963b77438f7079aa8": "HighloadWalletV3",
+  "0x6143be27281607e29eb0488c03e0b4894aec357947841b8bc8c744044a1f7f63": "HighloadWalletV3",
+  "0x4315bed953a7a6f27949490573865baa8aa27297d088bfbf62c943bf05c21b17": "HighloadWalletV3",
   "HighloadWalletV3": {
     "receivers": [
       {
@@ -3098,6 +3100,342 @@
           "kind": "typed",
           "type": "0x1b1"
         }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xec839"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x7654"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1b2"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1b3"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1b4"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1b5"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1b6"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1b7"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1b8"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1b9"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1ba"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1bb"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1bc"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1bd"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1be"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1bf"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1c0"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1c1"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1c2"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1c3"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1c4"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1c5"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1c6"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1c7"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1c8"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1c9"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1ca"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1cb"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1cc"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1cd"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1ce"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1cf"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1d0"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1d1"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1d2"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1d3"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1d4"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1d5"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1d6"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1d7"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xd3543"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xc15ba"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xe6bf1"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xa93c0"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xbd989"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x581e6"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xfa10"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x503cd"
+        }
       }
     ],
     "name": "HighloadWalletV3",
@@ -4849,6 +5187,198 @@
       {
         "name": "0x1b1",
         "header": 433
+      },
+      {
+        "name": "0xec839",
+        "header": 968761
+      },
+      {
+        "name": "0x7654",
+        "header": 30292
+      },
+      {
+        "name": "0x1b2",
+        "header": 434
+      },
+      {
+        "name": "0x1b3",
+        "header": 435
+      },
+      {
+        "name": "0x1b4",
+        "header": 436
+      },
+      {
+        "name": "0x1b5",
+        "header": 437
+      },
+      {
+        "name": "0x1b6",
+        "header": 438
+      },
+      {
+        "name": "0x1b7",
+        "header": 439
+      },
+      {
+        "name": "0x1b8",
+        "header": 440
+      },
+      {
+        "name": "0x1b9",
+        "header": 441
+      },
+      {
+        "name": "0x1ba",
+        "header": 442
+      },
+      {
+        "name": "0x1bb",
+        "header": 443
+      },
+      {
+        "name": "0x1bc",
+        "header": 444
+      },
+      {
+        "name": "0x1bd",
+        "header": 445
+      },
+      {
+        "name": "0x1be",
+        "header": 446
+      },
+      {
+        "name": "0x1bf",
+        "header": 447
+      },
+      {
+        "name": "0x1c0",
+        "header": 448
+      },
+      {
+        "name": "0x1c1",
+        "header": 449
+      },
+      {
+        "name": "0x1c2",
+        "header": 450
+      },
+      {
+        "name": "0x1c3",
+        "header": 451
+      },
+      {
+        "name": "0x1c4",
+        "header": 452
+      },
+      {
+        "name": "0x1c5",
+        "header": 453
+      },
+      {
+        "name": "0x1c6",
+        "header": 454
+      },
+      {
+        "name": "0x1c7",
+        "header": 455
+      },
+      {
+        "name": "0x1c8",
+        "header": 456
+      },
+      {
+        "name": "0x1c9",
+        "header": 457
+      },
+      {
+        "name": "0x1ca",
+        "header": 458
+      },
+      {
+        "name": "0x1cb",
+        "header": 459
+      },
+      {
+        "name": "0x1cc",
+        "header": 460
+      },
+      {
+        "name": "0x1cd",
+        "header": 461
+      },
+      {
+        "name": "0x1ce",
+        "header": 462
+      },
+      {
+        "name": "0x1cf",
+        "header": 463
+      },
+      {
+        "name": "0x1d0",
+        "header": 464
+      },
+      {
+        "name": "0x1d1",
+        "header": 465
+      },
+      {
+        "name": "0x1d2",
+        "header": 466
+      },
+      {
+        "name": "0x1d3",
+        "header": 467
+      },
+      {
+        "name": "0x1d4",
+        "header": 468
+      },
+      {
+        "name": "0x1d5",
+        "header": 469
+      },
+      {
+        "name": "0x1d6",
+        "header": 470
+      },
+      {
+        "name": "0x1d7",
+        "header": 471
+      },
+      {
+        "name": "0xd3543",
+        "header": 865603
+      },
+      {
+        "name": "0xc15ba",
+        "header": 791994
+      },
+      {
+        "name": "0xe6bf1",
+        "header": 945137
+      },
+      {
+        "name": "0xa93c0",
+        "header": 693184
+      },
+      {
+        "name": "0xbd989",
+        "header": 776585
+      },
+      {
+        "name": "0x581e6",
+        "header": 360934
+      },
+      {
+        "name": "0xfa10",
+        "header": 64016
+      },
+      {
+        "name": "0x503cd",
+        "header": 328653
       }
     ]
   }
