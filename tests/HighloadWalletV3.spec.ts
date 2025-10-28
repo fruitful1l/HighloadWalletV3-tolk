@@ -70,7 +70,7 @@ describe('HighloadWalletV3', () => {
         //  blockchain.verbosity = {
         //       print: true,
         //       blockchainLogs: true,
-        //       vmLogs: "vm_logs",
+        //       vmLogs: "vm_logs_gas",
         //       debugLogs: true,
         // }
 
@@ -897,52 +897,52 @@ describe('HighloadWalletV3', () => {
             actionResultCode: 0
         });
     });
-//      it('should fail check query_id in old queries', async () => {
-//         const message = highloadWalletV3.createInternalTransfer({actions: [], queryId: new HighloadQueryId(), value: 0n})
+    //  it('should fail check query_id in old queries', async () => {
+    //     const message = highloadWalletV3.createInternalTransfer({actions: [], queryId: new HighloadQueryId(), value: 0n})
 
-//         const rndShift   = getRandomInt(0, maxShift);
-//         const rndBitNum  = getRandomInt(0, 1022);
+    //     const rndShift   = getRandomInt(0, maxShift);
+    //     const rndBitNum  = getRandomInt(0, 1022);
 
-//         const queryId = HighloadQueryId.fromShiftAndBitNumber(BigInt(rndShift), BigInt(rndBitNum));
+    //     const queryId = HighloadQueryId.fromShiftAndBitNumber(BigInt(rndShift), BigInt(rndBitNum));
 
-//         const testResult = await highloadWalletV3.sendExternalMessage(
-//             keyPair.secretKey,
-//             {
-//                 createdAt: 1000,
-//                 query_id: queryId,
-//                 message,
-//                 mode: 128,
-//                 subwalletId: SUBWALLET_ID,
-//                 timeout: DEFAULT_TIMEOUT
-//             }
-//         );
-//         expect(testResult.transactions).toHaveTransaction({
-//             from: highloadWalletV3.address,
-//             to: highloadWalletV3.address,
-//             success: true
-//         });
+    //     const testResult = await highloadWalletV3.sendExternalMessage(
+    //         keyPair.secretKey,
+    //         {
+    //             createdAt: 1000,
+    //             query_id: queryId,
+    //             message,
+    //             mode: 128,
+    //             subwalletId: SUBWALLET_ID,
+    //             timeout: DEFAULT_TIMEOUT
+    //         }
+    //     );
+    //     expect(testResult.transactions).toHaveTransaction({
+    //         from: highloadWalletV3.address,
+    //         to: highloadWalletV3.address,
+    //         success: true
+    //     });
 
-//         blockchain.now = 1000 + 100;
-//         //expect(await highloadWalletV3.getProcessed(queryId)).toBe(true);
+    //     blockchain.now = 1000 + 100;
+    //     //expect(await highloadWalletV3.getProcessed(queryId)).toBe(true);
 
-//         const res2 = await highloadWalletV3.sendExternalMessage(
-//             keyPair.secretKey,
-//             {
-//                 createdAt: 1050,
-//                 query_id: queryId,
-//                 message,
-//                 mode: 128,
-//                 subwalletId: SUBWALLET_ID,
-//                 timeout: DEFAULT_TIMEOUT
-//             }
-//         );
-//         expect(testResult.transactions).toHaveTransaction({
-//             from: highloadWalletV3.address,
-//             to: highloadWalletV3.address,
-//             success: true
-//         });
+    //     const res2 = await highloadWalletV3.sendExternalMessage(
+    //         keyPair.secretKey,
+    //         {
+    //             createdAt: 1050,
+    //             query_id: queryId,
+    //             message,
+    //             mode: 128,
+    //             subwalletId: SUBWALLET_ID,
+    //             timeout: DEFAULT_TIMEOUT
+    //         }
+    //     );
+    //     expect(testResult.transactions).toHaveTransaction({
+    //         from: highloadWalletV3.address,
+    //         to: highloadWalletV3.address,
+    //         success: true
+    //     });
 
-//     });
+    // });
 
 });
 

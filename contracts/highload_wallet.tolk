@@ -49,16 +49,12 @@ fun WalletStorage.load() {
     return WalletStorage.fromCell(contract.getData());  
 }
 
-struct QueryId {
-    shift: uint13;
-    bitNumber: uint10;
-}
-
 struct MsgInner {
     subwalletId: uint32;
     messageToSend: cell;
     sendMode: uint8;
-    queryId: QueryId;
+    shift: uint13;
+    bitNumber: uint10;
     createdAt: uint64;
     timeout: uint22;
 }
@@ -80,7 +76,7 @@ fun onInternalMessage(in: InMessage) {
         return();
     }
 
-    val msg = InternalTransfer.fromSlice(in.body, { // needs to change Internal to Allowed
+    val msg = lazy InternalTransfer.fromSlice(in.body, { // needs to change Internal to Allowed
         throwIfOpcodeDoesNotMatch: 111, // has to be changed
     });
     
@@ -93,7 +89,7 @@ fun onInternalMessage(in: InMessage) {
 fun onExternalMessage(inMsg: slice) {
 
    var signature = inMsg.getLastBits(512); // should be const above
-   var storage = lazy WalletStorage.load();
+   var storage = WalletStorage.load();
 
     if (storage.lastCleanTime < (blockchain.now() - storage.timeout)) {
         (storage.oldQueries, storage.queries) = (storage.queries, createEmptyMap<uint13, cell>());
@@ -117,34 +113,33 @@ fun onExternalMessage(inMsg: slice) {
     assert(innerSlice.createdAt <= blockchain.now()) throw INVALID_CREATED_AT;
 
 
-    var resOld = storage.oldQueries.get(innerSlice.queryId.shift);
+    var resOld = storage.oldQueries.get(innerSlice.shift);
     if (resOld.isFound) {
         var value = resOld.loadValue().beginParse();
-        value.skipBits(innerSlice.queryId.bitNumber);
+        value.skipBits(innerSlice.bitNumber);
 
         assert(!value.preloadInt(1)) throw ALREADY_EXECUTED;
     }
 
 
 
-    var res = storage.queries.get(innerSlice.queryId.shift);
+    var res = storage.queries.get(innerSlice.shift);
   
     var newValue: builder;
 
     if (res.isFound) {
-        var (tail, head) = res.loadValue().beginParse().loadTwoSlices(innerSlice.queryId.bitNumber);
+        var (tail, head) = res.loadValue().beginParse().loadTwoSlices(innerSlice.bitNumber);
         assert(head.loadInt(1) == 0) throw ALREADY_EXECUTED;
         newValue = beginCell().storeSlice(tail).storeBool(true).storeSlice(head);
     } else {
-        newValue = beginCell().storeZeroes(innerSlice.queryId.bitNumber).storeBool(true).storeZeroes(CELL_BIT_SIZE - innerSlice.queryId.bitNumber - 1);
+        newValue = beginCell().storeZeroes(innerSlice.bitNumber).storeBool(true).storeZeroes(CELL_BIT_SIZE - innerSlice.bitNumber - 1);
     }
 
     acceptExternalMessage();
 
-    storage.queries.set(innerSlice.queryId.shift, newValue.endCell());
+    storage.queries.set(innerSlice.shift, newValue.endCell());
 
     storage.save();
-
 
     commitContractDataAndActions();
 
@@ -200,24 +195,20 @@ fun isProcessed(queryId: int, needClean: int): int {
     var bitNumber = queryId & CELL_BIT_SIZE;
 
     var storage = lazy WalletStorage.load();
-    var oldQueries = storage.oldQueries;
-    var queries = storage.queries;
 
     if (needClean) {
         if (storage.lastCleanTime < (blockchain.now() - storage.timeout)) {
-            (oldQueries, queries) = (queries, createEmptyMap());
+            (storage.oldQueries, storage.queries) = (storage.queries, createEmptyMap());
             if (storage.lastCleanTime < (blockchain.now() - (storage.timeout * 2))) {
-                oldQueries = createEmptyMap();
+                storage.oldQueries = createEmptyMap();
             }
             storage.lastCleanTime = blockchain.now();
         }
     }
     
-    storage.queries = queries;
-    storage.oldQueries = oldQueries;
     storage.save();
 
-    var resOld = oldQueries.get(shift);
+    var resOld = storage.oldQueries.get(shift);
     if (resOld.isFound) {
         var value = resOld.loadValue().beginParse();
         value.skipBits(bitNumber);
@@ -226,7 +217,7 @@ fun isProcessed(queryId: int, needClean: int): int {
         }
     }
 
-    var res = queries.get(shift);
+    var res = storage.queries.get(shift);
     if (res.isFound) {
         var valueCurrent = res.loadValue().beginParse();
         valueCurrent.skipBits(bitNumber);
