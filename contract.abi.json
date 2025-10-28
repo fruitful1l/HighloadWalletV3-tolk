@@ -20,6 +20,15 @@
   "0x9eefd262279abb62a423ef4fd49b6f0621c8f29fd0a71a173f849c4602d8ecb3": "HighloadWalletV3",
   "0xfbe8158c8b605991d84cd009d32be775147eae1af66bbfa79954bcc7f640edcf": "HighloadWalletV3",
   "0x2ed98c6d2026f3c20a28e38b61001486f7a7161c312900f0420f45d11d3884f2": "HighloadWalletV3",
+  "0xd39da337f354326486943ee008105fcc592af89f001d29e4b046c46abc795a37": "HighloadWalletV3",
+  "0x3d2fbf1ceb533d724962e00641db65fcc4a2965dcdbf5ac5b3aa1067a5b1349c": "HighloadWalletV3",
+  "0x0b542521cd3d96aac1cadaf180a34c6c90ec882a40c54d3cfae6ffc9ed68bea0": "HighloadWalletV3",
+  "0x1d5cccff3773056b57269a679bcb66ecc589f34f02d91e4d53d437480e9445a3": "HighloadWalletV3",
+  "0x5717f0364dbc8c59d74b0c35d77f14f6e46e91e7ab93386b6ba7fbfd587e0633": "HighloadWalletV3",
+  "0xa8b4ddd7804a7c9817349902ff3b07f0ac5f1c9c8e696b0f6dd398b5f2bdaf20": "HighloadWalletV3",
+  "0x5fe181cd5839f12aa0615f8db7b49e765533af61e8b564245f6f9263af3ad9dd": "HighloadWalletV3",
+  "0x8768794b54c9b1c9e59d7dabe369f6a614e1435246814ba2b2f27b7ed4befb81": "HighloadWalletV3",
+  "0x3608d760551215dae03eb24b275a0938ed9da10f58ccee555110fc512ff9dd28": "HighloadWalletV3",
   "HighloadWalletV3": {
     "receivers": [
       {
@@ -3899,6 +3908,160 @@
           "kind": "typed",
           "type": "0x8da55"
         }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x1eb89"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x95d17"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x4141"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x3f78f"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x9fb09"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x343ca"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x33c43"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x50691"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x6fca8"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xe2301"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x781a7"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x132b4"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xac443"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x619d8"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xc03e0"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xe0aae"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xd1a36"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x7286"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xc6bb6"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x6fc99"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0x56e9"
+        }
+      },
+      {
+        "receiver": "internal",
+        "message": {
+          "kind": "typed",
+          "type": "0xd76a4"
+        }
       }
     ],
     "name": "HighloadWalletV3",
@@ -6098,6 +6261,94 @@
       {
         "name": "0x8da55",
         "header": 580181
+      },
+      {
+        "name": "0x1eb89",
+        "header": 125833
+      },
+      {
+        "name": "0x95d17",
+        "header": 613655
+      },
+      {
+        "name": "0x4141",
+        "header": 16705
+      },
+      {
+        "name": "0x3f78f",
+        "header": 259983
+      },
+      {
+        "name": "0x9fb09",
+        "header": 654089
+      },
+      {
+        "name": "0x343ca",
+        "header": 213962
+      },
+      {
+        "name": "0x33c43",
+        "header": 212035
+      },
+      {
+        "name": "0x50691",
+        "header": 329361
+      },
+      {
+        "name": "0x6fca8",
+        "header": 457896
+      },
+      {
+        "name": "0xe2301",
+        "header": 926465
+      },
+      {
+        "name": "0x781a7",
+        "header": 491943
+      },
+      {
+        "name": "0x132b4",
+        "header": 78516
+      },
+      {
+        "name": "0xac443",
+        "header": 705603
+      },
+      {
+        "name": "0x619d8",
+        "header": 399832
+      },
+      {
+        "name": "0xc03e0",
+        "header": 787424
+      },
+      {
+        "name": "0xe0aae",
+        "header": 920238
+      },
+      {
+        "name": "0xd1a36",
+        "header": 858678
+      },
+      {
+        "name": "0x7286",
+        "header": 29318
+      },
+      {
+        "name": "0xc6bb6",
+        "header": 814006
+      },
+      {
+        "name": "0x6fc99",
+        "header": 457881
+      },
+      {
+        "name": "0x56e9",
+        "header": 22249
+      },
+      {
+        "name": "0xd76a4",
+        "header": 882340
       }
     ]
   }

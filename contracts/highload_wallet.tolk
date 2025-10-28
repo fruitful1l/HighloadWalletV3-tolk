@@ -5,7 +5,8 @@ fun builder.storeZeroes(mutate self, x: int): self asm "STZEROES";
 fun acceptExternalMessage(): void asm "ACCEPT"; // for some reason not in stdlib
 fun slice.loadTwoSlices( self, len: int): (slice, slice) asm "LDSLICEX";
 
-const internalTransferOp: int = 0xae42e5a4;
+
+
 //unused consts should be deleted
 const INVALID_SIGNATURE: int= 33;
 const INVALID_SUBWALLET_ID: int = 34;
@@ -26,11 +27,9 @@ struct (0xae42e5a4) InternalTransfer {
     actions: Cell<Outlist>;
 }
 
-
 struct ExternalInMsgBody {
    body: Cell<MsgInner>;
 }   
-
 
 struct WalletStorage {
     publicKey: uint256;
@@ -59,37 +58,35 @@ struct MsgInner {
     timeout: uint22;
 }
 
-
-
 type AllowedExternalMessageToWallet = ExternalInMsgBody;
-
+type AllowedInternalMessageToWallet = InternalTransfer;
 
 
 fun onInternalMessage(in: InMessage) {
+    val msg = lazy AllowedInternalMessageToWallet.fromSlice(in.body);
+    match (msg) {
+        InternalTransfer => {
 
-    val (bodyBits, bodyRefs) = in.body.remainingBitsAndRefsCount();
-    if(!((bodyRefs == 1) & (bodyBits == MSG_OP_SIZE + MSG_QUERY_ID_SIZE))) {
-        return();
-    }   
+            if (in.senderAddress != contract.getAddress()) {
+                return();
+            }
 
-    if(!(in.senderAddress == contract.getAddress())) {
-        return();
+            setActions(msg.actions);
+            contract.setCodePostponed(contract.getCode());
+            return();
+        }
+         
+        else => {
+            return();
+        } 
     }
-
-    val msg = lazy InternalTransfer.fromSlice(in.body, { // needs to change Internal to Allowed
-        throwIfOpcodeDoesNotMatch: 111, // has to be changed
-    });
-    
-    val oldCode = contract.getCode();
-    setActions(msg.actions);
-    contract.setCodePostponed(oldCode);
-    return();
 }
+
 
 fun onExternalMessage(inMsg: slice) {
 
-   var signature = inMsg.getLastBits(512); // should be const above
-   var storage = WalletStorage.load();
+    var signature = inMsg.getLastBits(512); // should be const above    
+    var storage = WalletStorage.load();
 
     if (storage.lastCleanTime < (blockchain.now() - storage.timeout)) {
         (storage.oldQueries, storage.queries) = (storage.queries, createEmptyMap<uint13, cell>());
@@ -108,10 +105,8 @@ fun onExternalMessage(inMsg: slice) {
 
     assert(innerSlice.subwalletId == storage.subwalletId) throw INVALID_SUBWALLET_ID;
     assert(innerSlice.timeout == storage.timeout) throw INVALID_TIMEOUT;
-
     assert(innerSlice.createdAt > blockchain.now() - storage.timeout) throw INVALID_CREATED_AT;
     assert(innerSlice.createdAt <= blockchain.now()) throw INVALID_CREATED_AT;
-
 
     var resOld = storage.oldQueries.get(innerSlice.shift);
     if (resOld.isFound) {
@@ -121,10 +116,7 @@ fun onExternalMessage(inMsg: slice) {
         assert(!value.preloadInt(1)) throw ALREADY_EXECUTED;
     }
 
-
-
     var res = storage.queries.get(innerSlice.shift);
-  
     var newValue: builder;
 
     if (res.isFound) {
@@ -136,24 +128,19 @@ fun onExternalMessage(inMsg: slice) {
     }
 
     acceptExternalMessage();
-
     storage.queries.set(innerSlice.shift, newValue.endCell());
-
     storage.save();
-
     commitContractDataAndActions();
 
     var msgToSend = innerSlice.messageToSend.beginParse();
     
     assert(!msgToSend.loadUint(1)) throw INVALID_MESSAGE_TO_SEND;
-
     if (msgToSend.loadUint(3) & 1) { 
         return();
     }
-
     assert (msgToSend.loadAddress().isNone()) throw INVALID_MESSAGE_TO_SEND;
-    var destination = msgToSend.loadAddress();
-    val valueToSend = msgToSend.loadCoins();
+    msgToSend.loadAddress();
+    msgToSend.loadCoins();
     msgToSend.skipDict();
     msgToSend.loadCoins();
     msgToSend.loadCoins();
@@ -168,6 +155,8 @@ fun onExternalMessage(inMsg: slice) {
     output.send(innerSlice.sendMode | SEND_MODE_IGNORE_ERRORS);
     return();
 }
+
+
 
 get fun get_public_key()  {
     var storage = lazy WalletStorage.load();
