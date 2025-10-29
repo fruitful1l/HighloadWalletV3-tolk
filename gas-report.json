@@ -1,7 +1,66 @@
 [
   {
     "label": "current",
-    "createdAt": "2025-10-28T13:44:29.059Z",
-    "result": {}
+    "createdAt": "2025-10-29T13:54:20.899Z",
+    "result": {
+      "HighloadWalletV3": {
+        "sendDeploy": {
+          "gasUsed": {
+            "kind": "init",
+            "value": "1937"
+          },
+          "cells": {
+            "kind": "init",
+            "value": "20"
+          },
+          "bits": {
+            "kind": "init",
+            "value": "4493"
+          }
+        },
+        "send": {
+          "gasUsed": {
+            "kind": "init",
+            "value": "536"
+          },
+          "cells": {
+            "kind": "init",
+            "value": "20"
+          },
+          "bits": {
+            "kind": "init",
+            "value": "4493"
+          }
+        },
+        "sendExternalMessage": {
+          "gasUsed": {
+            "kind": "init",
+            "value": "6259"
+          },
+          "cells": {
+            "kind": "init",
+            "value": "20"
+          },
+          "bits": {
+            "kind": "init",
+            "value": "4493"
+          }
+        },
+        "0xae42e5a4": {
+          "gasUsed": {
+            "kind": "init",
+            "value": "1236"
+          },
+          "cells": {
+            "kind": "init",
+            "value": "20"
+          },
+          "bits": {
+            "kind": "init",
+            "value": "4493"
+          }
+        }
+      }
+    }
   }
 ]

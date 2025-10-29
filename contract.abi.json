@@ -29,6 +29,8 @@
   "0x5fe181cd5839f12aa0615f8db7b49e765533af61e8b564245f6f9263af3ad9dd": "HighloadWalletV3",
   "0x8768794b54c9b1c9e59d7dabe369f6a614e1435246814ba2b2f27b7ed4befb81": "HighloadWalletV3",
   "0x3608d760551215dae03eb24b275a0938ed9da10f58ccee555110fc512ff9dd28": "HighloadWalletV3",
+  "0x4099fb2cf237d37f8bdbb642798a640b691f403472720081debe943c7a788d51": "HighloadWalletV3",
+  "0x9303df58894c8770753cd0827a5e930e45cae8f809ec7b2a2f98baa6abad6a72": "HighloadWalletV3",
   "HighloadWalletV3": {
     "receivers": [
       {

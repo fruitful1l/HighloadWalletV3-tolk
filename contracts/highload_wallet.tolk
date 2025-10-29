@@ -1,11 +1,10 @@
 import "@stdlib/tvm-lowlevel"
+import "@stdlib/tvm-dicts"
 
 fun setActions(actions: Outlist): void asm "c5 POP";
 fun builder.storeZeroes(mutate self, x: int): self asm "STZEROES";
 fun acceptExternalMessage(): void asm "ACCEPT"; // for some reason not in stdlib
 fun slice.loadTwoSlices( self, len: int): (slice, slice) asm "LDSLICEX";
-
-
 
 //unused consts should be deleted
 const INVALID_SIGNATURE: int= 33;
@@ -112,15 +111,15 @@ fun onExternalMessage(inMsg: slice) {
     if (resOld.isFound) {
         var value = resOld.loadValue().beginParse();
         value.skipBits(innerSlice.bitNumber);
-
         assert(!value.preloadInt(1)) throw ALREADY_EXECUTED;
     }
 
-    var res = storage.queries.get(innerSlice.shift);
+    // var res = storage.queries.get(innerSlice.shift);
     var newValue: builder;
-
-    if (res.isFound) {
-        var (tail, head) = res.loadValue().beginParse().loadTwoSlices(innerSlice.bitNumber);
+    var (cl, res) = storage.queries.toLowLevelDict().uDictGetRef(13, innerSlice.shift);
+    
+    if (res) {
+        var (tail, head) = cl!.beginParse().loadTwoSlices(innerSlice.bitNumber);
         assert(head.loadInt(1) == 0) throw ALREADY_EXECUTED;
         newValue = beginCell().storeSlice(tail).storeBool(true).storeSlice(head);
     } else {
